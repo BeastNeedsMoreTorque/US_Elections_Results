@@ -34,7 +34,7 @@ function ready(error, us, data) {
         d.result = d["per_dem"] - d["per_gop"];
         d.gop_votes = +d.votes_gop;
         d.dem_votes = +d.votes_dem;
-        d.votes_total = +d.total_votes;        
+        d.votes_total = +d.total_votes;
         d.combined_fips = +d.combined_fips;
         dictCities[d.combined_fips] = d;
     });
@@ -64,7 +64,7 @@ function ready(error, us, data) {
     };
 
     var projection = d3.geoAlbersUsa()
-        .scale(1280)
+        .scale(width)
         .translate([width / 2, height / 2]);
 
     var path = d3.geoPath()
@@ -86,21 +86,21 @@ function ready(error, us, data) {
                 return color(0);
             }
         })
-        .attr("d", path);
-//         .append("title")
-//         .text(function(d) {
-//             var city = dictCities[d.id],
-//                 county,
-//                 state;
-                
-//             // var msg = d.id;
-//             if (city) {
-//                 county = city.county_name;
-//                 state = city.state_abbr;
-//                 var msg = county + ', ' + state + " Difference: " + fmt(city.result);
-//             }
-//             return msg;
-//         });
+        .attr("d", path)
+        .append("title")
+        .text(function(d) {
+            var city = dictCities[d.id],
+                county,
+                state;
+
+            // var msg = d.id;
+            if (city) {
+                county = city.county_name;
+                state = city.state_abbr;
+                var msg = county + ', ' + state + " Difference: " + fmt(city.result);
+            }
+            return msg;
+        });
 
 
     // g.append("g")
@@ -198,7 +198,7 @@ function ready(error, us, data) {
         // .shapeWidth(30)
         .cells(7)
         .orient(width > 767 ? "vertical" : "horizontal")
-        .title("Diferencia")
+        .title("Difference")
         .labels([
             " 100.00% Dem",
             "  66.67%",
@@ -254,18 +254,18 @@ function ready(error, us, data) {
         var data = [0.4978, -0.5021],
             votes_total,
             gop_votes,
-            dem_votes,            
+            dem_votes,
             name = "Difference " + fmt(data[0] + data[1]),
             state,
             county,
             city;
-            
+
         if (d) {
             city = dictCities[d.id];
             if (city) {
                 votes_total = city.votes_total,
                 gop_votes = city.gop_votes,
-                dem_votes = city.dem_votes,                
+                dem_votes = city.dem_votes,
                 county = city['county_name'];
                 state = city['state_abbr'];
                 data = [city["per_dem"], -city["per_gop"]];
@@ -315,14 +315,14 @@ function ready(error, us, data) {
             "<b>Hillary Clinton: </b>" + comma_fmt(dem_votes) + "<br/>" +
             "<b>Donald J. Trump: </b>" + comma_fmt(gop_votes) + "<br/>" +
             "<b>Total Votes Cast: </b>" + comma_fmt(votes_total) + "<br/>";
-            
+
         // In d3.v4, style and attribute properties must be set individually
         tooltip.html(content);
         tooltip.style("visibility", "visible");
         tooltip.style("top", (event.pageY + 30) + "px");
         tooltip.style("left", (event.pageX + 30) + "px");
-            
-        return tooltip;        
+
+        return tooltip;
 
     }
 }
